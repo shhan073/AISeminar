@@ -1,5 +1,4 @@
 """Load from /home/USER/data/cifar10 or elsewhere; download if missing."""
-import gzip
 
 import tarfile
 import sys, os
@@ -43,35 +42,34 @@ def cifar10_load_data():
     # Set path to /home/USER/data/cifar10 or C:\Users\USER\data\cifar10
     # path = os.path.join(os.path.expanduser('~'), 'data', 'cifar10')
     path = os.path.dirname(os.path.abspath(__file__))
-    print(path)
+    print('path=', path)
     # path = the current directory
 
     # Create path if it doesn't exist
     # os.makedirs(path, exist_ok=True)
 
-    with gzip.open('D:\CNN-image dimension\cifar10\cifar-10-python.tar.gz',  'rb') as gzfile:
-        tar_object = gzfile.read()
-    print('tar_object=', tar_object)
     
     # Download tarfile if missing
     if tar not in os.listdir(path):        
-        # urlretrieve(''.join((url, tar)), os.path.join(path, tar))
+       # urlretrieve(''.join((url, tar)), os.path.join(path, tar))
         file_data = requests.get(url + tar)
         print('file_data = ', file_data)
         with open(os.path.join(path, tar), 'wb') as file:
             file.write(file_data.content)
         print("Downloaded %s to %s" % (tar, path))
 
-    num_train_samples = 60000
+    # tar_object = tarfile.open('./cifar-10-python.tar.gz')
+
+    num_train_samples = 50000
     x_train = np.empty((num_train_samples, 3, 32, 32), dtype='uint8')
     y_train = np.empty((num_train_samples,), dtype='uint8')
     print('x_train.shape = ', x_train.shape)
     print('y_train.shape = ', y_train.shape)
 
-    with tarfile.open(os.path.join(path, tar)) as tar_object:
+    with tarfile.open(os.path.join(path, tar), "r:gz") as tar_object:
         members = [file for file in tar_object if file.name in files]
         members.sort(key=lambda member: member.name)
-        # print('members = ', members)
+        print('members = ', members)
         for i, member in enumerate(members):
             # member =  <TarInfo 'cifar-10-batches-py/data_batch_1' at 0x2120cafa700>
             # member =  <TarInfo 'cifar-10-batches-py/data_batch_2' at 0x2120cafa580>
@@ -80,18 +78,21 @@ def cifar10_load_data():
             # member =  <TarInfo 'cifar-10-batches-py/data_batch_5' at 0x2120cafa280>
             # member =  <TarInfo 'cifar-10-batches-py/test_batch' at 0x2120cafa340>
             
-            f = tar_object.extractfile(member)
-            print('f = ', f)
+            fb = tar_object.extractfile(member)
+            print('fb = ', fb)
+            print('member = ', member)
+
+            dict = pickle.load(fb, encoding='latin1')
             # f =  <ExFileObject name='D:\\CNN-image dimension\\cifar10\\cifar-10-python.tar.gz'>
             # type(f) =  <class 'tarfile.ExFileObject'>
 
-            f_array = np.frombuffer(f.read(), dtype='uint8')
-            print('f_array.shape = ', f_array.shape)
+            #f_array = np.frombuffer(f.read(), dtype='uint8')
+            f_array = np.frombuffer(dict['data'], dtype='uint8')
 
-            (x_train[(i - 1) * 10000:i * 10000, :, :, :], y_train[(i - 1) * 10000:i * 10000]) = np.frombuffer(f.read(), dtype='uint8')
+            # (x_train[(i - 1) * 10000:i * 10000, :, :, :], y_train[(i - 1) * 10000:i * 10000]) = np.frombuffer(dict['data'], dtype='uint8')
          
-            f_array = np.frombuffer(f.read(), dtype='uint8')
-            # type of f_array =  <class 'numpy.ndarray'>
+            f_array = np.frombuffer(dict['data'], dtype='uint8')
+            print('f_array.shape = ', f_array.shape)
             # f_array.shape =  (31035704,)
             # f_array.shape =  (31035320,)
             # f_array.shape =  (31035999,)
@@ -100,7 +101,8 @@ def cifar10_load_data():
             # f_array.shape =  (31035526,)
   
     f = open(path +'/' + tar, 'rb')
-    dict = pickle.load(f)
+    #dict = pickle.load(f)
+    dict = pickle.load(tar_object)
     images = dict['data']
     #images = np.reshape(images, (10000, 3, 32, 32))
     labels = dict['labels']
@@ -108,14 +110,14 @@ def cifar10_load_data():
     labelarray = np.array(labels)
     
     # Load data from tarfile
-    with tarfile.open(os.path.join(path, tar)) as tar_object:
+    # with tarfile.open(os.path.join(path, tar)) as tar_object:
         # Each file contains 10,000 color images and 10,000 labels
-        dict = pickle.load(tar_object)
-        images = dict['data']
-        #images = np.reshape(images, (10000, 3, 32, 32))
-        labels = dict['labels']
-        imagearray = np.array(images)   #   (10000, 3072)
-        labelarray = np.array(labels)
+    dict = pickle.load(tar_object)
+    images = dict['data']
+    #images = np.reshape(images, (10000, 3, 32, 32))
+    labels = dict['labels']
+    imagearray = np.array(images)   #   (10000, 3072)
+    labelarray = np.array(labels)
 
 
     # be careful : originally (3, 32, 32)

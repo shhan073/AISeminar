@@ -1,0 +1,7 @@
+use python3.6
+python3.6 cifar10_python.py
+
+pip install requests
+pip install pillow
+pip install matplotlib
+pip install python-tk
