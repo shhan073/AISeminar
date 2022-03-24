@@ -39,7 +39,9 @@ train_images, train_labels = train_images[:itrain], train_labels[:itrain]
 test_images, test_labels = test_images[:itest], test_labels[:itest]
 
 model = models.Sequential()
+# Kernel, Weight, Parameter, 32*3*3 + 32(bias, )
 model.add(layers.Conv2D(32, (3,3), activation='relu', input_shape=(28,28,1)))
+
 model.add(layers.MaxPool2D((2,2)))
 # model.add(layers.Conv2D(64, (3,3), activation='relu'))
 # model.add(layers.MaxPool2D((2,2)))
