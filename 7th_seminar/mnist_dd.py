@@ -27,26 +27,26 @@ from matplotlib import pyplot as plt
 train_images = train_images.reshape((60000, 28, 28, 1))
 test_images = test_images.reshape((10000, 28, 28, 1))
 
-train_images = train_images.astype('float32')/255
+train_images = train_images.astype('float32')/255 # value range 0~1 floating
 test_images = test_images.astype('float32')/255
 
 train_labels = to_categorical(train_labels)
 test_labels = to_categorical(test_labels)
 
-itrain = 10000
-itest = 2000
+itrain = 10000 # train count
+itest = 2000   # test count
 
 train_images, train_labels = train_images[:itrain], train_labels[:itrain]
 test_images, test_labels = test_images[:itest], test_labels[:itest]
 
-model = models.Sequential()
+model = models.Sequential() # 
 # model.add(layers.Conv2D(32, (3,3), activation='relu', input_shape=(28,28,1)))
 # model.add(layers.MaxPool2D((2,2)))
 # model.add(layers.Conv2D(64, (3,3), activation='relu'))
 # model.add(layers.MaxPool2D((2,2)))
 # model.add(layers.Conv2D(64, (3,3), activation='relu'))
 
-model.add(layers.Flatten(input_shape=(28,28,1)))
+model.add(layers.Flatten(input_shape=(28,28,1))) # make flat for making input to dense
 # model.add(layers.Flatten())
 model.add(layers.Dense(64, activation='relu'))
 model.add(layers.Dense(10, activation='softmax'))
@@ -54,12 +54,16 @@ model.summary()
 
 # from tensorflow.keras import optimizers
 # sgd = optimizers.SGD(learning_rate=0.001, momentum=0.9)
+# SGD is simplest
 
 model.compile(optimizer='RMSprop', # or rmsprop
               loss='categorical_crossentropy',
               metrics=['accuracy'])
 
-hist = model.fit(train_images, train_labels, epochs=10, batch_size=64, validation_data=(test_images, test_labels))
+hist = model.fit(train_images, train_labels, epochs=10, batch_size=64, validation_data=(test_images, test_labels)) # fit means learning
+# 1 epoch means full data processing
+# 2 epoch get input data randomly
+# it operates with updated weight files
 
 acc = hist.history['accuracy']
 loss = hist.history['loss']
