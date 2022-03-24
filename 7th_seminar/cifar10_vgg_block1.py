@@ -25,6 +25,7 @@ y_test = to_categorical(y_test)
 
 model = Sequential()
 # 'padding = same' means "making input and output size as same"
+# 'padding = varid'
 model.add(Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same', input_shape=(32, 32, 3)))
 model.add(Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same'))
 model.add(MaxPooling2D((2, 2)))
@@ -34,6 +35,9 @@ model.add(Dense(10, activation='softmax'))
 model.summary()
 
 from tensorflow.keras import optimizers
+# gd means gradient decent, SGD is stochastic gradient decent
+# for minimize error, decent is used
+# for visualization, acent will be used
 sgd = optimizers.SGD(learning_rate=0.001, momentum=0.9) 
 # optimizers provided by tensorflow.keras only, not by keras
 
