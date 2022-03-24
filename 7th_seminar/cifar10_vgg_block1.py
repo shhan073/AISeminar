@@ -24,6 +24,7 @@ y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
 
 model = Sequential()
+# 'padding = same' means "making input and output size as same"
 model.add(Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same', input_shape=(32, 32, 3)))
 model.add(Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same'))
 model.add(MaxPooling2D((2, 2)))
