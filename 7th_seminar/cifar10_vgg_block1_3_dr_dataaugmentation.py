@@ -29,6 +29,7 @@ x_test /= 255
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
 
+# data augementation function, make generating augemented data
 train_image_generator = ImageDataGenerator(width_shift_range=0.1, \
                         height_shift_range=0.1, horizontal_flip=True)
 
