@@ -1,0 +1,23 @@
+# sigmoid
+  - binary 
+  - input 32, featuremap 32,
+
+  CAM( Class Activation Map )
+  ; Feature Map이 결과를 도출하는데 어느정도 영향을 주는지 확인하기 위한 기능
+  
+  A = feature map form Conv-base (1, M, C, FC)
+
+  - GAP ( Globally Average  )
+  - 한 평면의 평균 값
+
+  Grad-CAM( )
+  - FC layer 가 필요없다. 일반적으로 적용이 가능하다.
+
+
+  Filter Visualization
+  - Gradient Ascent  
+  - W(FC,FH,FW,FN)  => (k+1) filter, Wk(FC, FH,FW)
+
+  Gradient 공부가 필요하다.
+  - 
+  LOSS는 항상 Scalar
